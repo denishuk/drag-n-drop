@@ -1,15 +1,4 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { 
-  UploadCloud, 
-  X, 
-  Eye, 
-  Download, 
-  CheckCircle, 
-  AlertCircle,
-  Image,
-  FileText,
-  File
-} from 'lucide-react';
 
 // Types
 export interface FileUploadProps {
@@ -49,11 +38,67 @@ const formatFileSize = (bytes: number): string => {
   return `${mb.toFixed(1)} MB`;
 };
 
+// SVG Icons as React components (no external dependencies)
+const UploadCloudIcon = () => (
+  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+const DownloadIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+);
+
+const CheckCircleIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const AlertCircleIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const ImageIcon = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
+
+const FileTextIcon = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
+const FileIcon = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+  </svg>
+);
+
 const getFileIcon = (type: string) => {
-  if (type.startsWith('image/')) return Image;
-  if (type === 'application/pdf') return FileText;
-  if (type.includes('document') || type.includes('msword')) return FileText;
-  return File;
+  if (type.startsWith('image/')) return ImageIcon;
+  if (type === 'application/pdf') return FileTextIcon;
+  if (type.includes('document') || type.includes('msword')) return FileTextIcon;
+  return FileIcon;
 };
 
 const getFileIconColor = (type: string) => {
@@ -376,7 +421,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
         <div className="mb-6 space-y-2">
           {errors.map((error, index) => (
             <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+              <div className="text-red-500 mr-3 mt-0.5 flex-shrink-0">
+                <AlertCircleIcon />
+              </div>
               <div>
                 <p className="text-sm text-red-800">{error.message}</p>
                 {error.fileName && (
@@ -426,8 +473,8 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
               
               <div className="space-y-4">
                 <div className="flex justify-center">
-                  <div className="bg-blue-100 p-4 rounded-full">
-                    <UploadCloud className="w-8 h-8 text-blue-600" />
+                  <div className="bg-blue-100 p-4 rounded-full text-blue-600">
+                    <UploadCloudIcon />
                   </div>
                 </div>
                 <div>
@@ -487,7 +534,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
                           onClick={() => removeFromQueue(file.id)}
                           className="text-gray-400 hover:text-red-500 p-1"
                         >
-                          <X className="w-4 h-4" />
+                          <XIcon />
                         </button>
                       </div>
                     </div>
@@ -502,7 +549,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold text-gray-900">Uploaded Files</h2>
               <div className="flex items-center space-x-2 text-sm text-gray-500">
-                <CheckCircle className="w-4 h-4 text-green-500" />
+                <div className="text-green-500">
+                  <CheckCircleIcon />
+                </div>
                 <span>{uploadedFiles.length} files uploaded</span>
               </div>
             </div>
@@ -533,7 +582,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
                             className="text-gray-400 hover:text-blue-500 p-1"
                             title="View file"
                           >
-                            <Eye className="w-4 h-4" />
+                            <EyeIcon />
                           </button>
                         )}
                         <button
@@ -541,14 +590,14 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
                           className="text-gray-400 hover:text-green-500 p-1"
                           title="Download file"
                         >
-                          <Download className="w-4 h-4" />
+                          <DownloadIcon />
                         </button>
                         <button
                           onClick={() => removeUploadedFile(file.id)}
                           className="text-gray-400 hover:text-red-500 p-1"
                           title="Remove file"
                         >
-                          <X className="w-4 h-4" />
+                          <XIcon />
                         </button>
                       </div>
                     </div>

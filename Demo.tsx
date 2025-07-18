@@ -1,6 +1,5 @@
 import React from 'react';
-import FileUpload from './FileUpload';
-import { UploadedFile, FileError } from './FileUpload';
+import FileUpload, { UploadedFile, FileError } from './FileUpload';
 
 const Demo: React.FC = () => {
   const handleFileUpload = (files: UploadedFile[]) => {
