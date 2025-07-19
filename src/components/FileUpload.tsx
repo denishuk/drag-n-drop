@@ -1,29 +1,29 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { 
-  UploadCloud, 
-  FolderOpen, 
-  X, 
-  Eye, 
-  Download, 
-  Trash2, 
-  CheckCircle, 
-  Info,
+import React, { useCallback, useRef, useState } from 'react';
+import {
   AlertCircle,
-  Image,
-  FileText,
-  FileSpreadsheet,
+  CheckCircle,
+  Download,
+  Eye,
+  File,
   FileChartColumn,
-  File
+  FileSpreadsheet,
+  FileText,
+  FolderOpen,
+  Image,
+  Info,
+  Trash2,
+  UploadCloud,
+  X
 } from 'lucide-react';
-import { FileUploadProps, UploadedFile, FileError, FileQueueItem } from './FileUpload/types';
-import { 
-  formatFileSize, 
-  getFileIcon, 
-  getFileIconColor, 
-  validateFile, 
-  createFilePreview, 
+import { FileError, FileQueueItem, FileUploadProps, UploadedFile } from './FileUpload/types';
+import {
+  createFilePreview,
+  formatFileSize,
+  getFileIcon,
+  getFileIconColor,
+  getTimeAgo,
   simulateUpload,
-  getTimeAgo 
+  validateFile
 } from './FileUpload/utils';
 
 const defaultProps: Partial<FileUploadProps> = {
@@ -79,7 +79,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     }
 
     const validFiles: File[] = [];
-    
+
     for (const file of fileArray) {
       const error = validateFile(file, acceptedTypes, maxFileSize);
       if (error) {
@@ -96,11 +96,11 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
 
     // Process valid files
     const newQueueItems: FileQueueItem[] = [];
-    
+
     for (const file of validFiles) {
       const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       const preview = showPreviews ? await createFilePreview(file) : undefined;
-      
+
       const queueItem: FileQueueItem = {
         id,
         name: file.name,
@@ -127,8 +127,8 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
 
   const uploadFile = async (queueItem: FileQueueItem) => {
     // Update status to uploading
-    setUploadQueue(prev => prev.map(item => 
-      item.id === queueItem.id 
+    setUploadQueue(prev => prev.map(item =>
+      item.id === queueItem.id
         ? { ...item, status: 'uploading' as const }
         : item
     ));
@@ -152,7 +152,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
 
       setUploadedFiles(prev => [...prev, uploadedFile]);
       setUploadQueue(prev => prev.filter(item => item.id !== queueItem.id));
-      
+
       onFileUpload?.([uploadedFile]);
     } catch (error) {
       setUploadQueue(prev => prev.map(item =>
@@ -190,7 +190,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     if (disabled) return;
 
     const files = e.dataTransfer.files;
@@ -331,7 +331,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
                 className="hidden"
                 disabled={disabled}
               />
-              
+
               <div className="space-y-4">
                 <div className="flex justify-center">
                   <div className="bg-blue-100 p-4 rounded-full">

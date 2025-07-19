@@ -1,7 +1,8 @@
-import React from 'react';
-import FileUpload, { UploadedFile, FileError } from './FileUpload';
+import { FileError, UploadedFile } from '@/components/FileUpload/types.ts';
+import FileUpload from '@/components/FileUpload.tsx';
 
-const Demo: React.FC = () => {
+
+function App() {
   const handleFileUpload = (files: UploadedFile[]) => {
     console.log('Files uploaded:', files);
   };
@@ -17,9 +18,10 @@ const Demo: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <FileUpload
-        acceptedTypes={['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']}
+        acceptedTypes={[ 'image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ]}
         maxFileSize={10 * 1024 * 1024} // 10MB
         maxFiles={10}
+        showPreviews={true}
         allowMultiple={true}
         onFileUpload={handleFileUpload}
         onFileRemove={handleFileRemove}
@@ -27,6 +29,6 @@ const Demo: React.FC = () => {
       />
     </div>
   );
-};
+}
 
-export default Demo;
+export default App;
